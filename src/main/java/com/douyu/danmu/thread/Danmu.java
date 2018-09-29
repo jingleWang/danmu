@@ -49,10 +49,15 @@ public class Danmu {
         logger.info("Danmu start succefully!");
         while (true) {
             if (receiveThread != null && aliveThread != null && (!aliveThread.isAlive() || !receiveThread.isAlive())) {
+                tcpSocketClient = null;
+                keepaliveSender = null;
+                receiveData = null;
                 tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
                 keepaliveSender = new KeepaliveSender(tcpSocketClient);
                 receiveData = new ReceiveData(tcpSocketClient);
                 aliveThread = sendKeepalive();
+                tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
+                tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
                 receiveThread = receiveData();
                 logger.info("Danmu restart succefully!");
             }
