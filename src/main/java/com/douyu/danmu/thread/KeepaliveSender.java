@@ -20,11 +20,13 @@ public class KeepaliveSender implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        Boolean runState = true;
+        while (runState) {
             this.tcpSocketClient.sendData("type@=mrkl/");
             try {
                 Thread.sleep(40000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
+                runState = false;
                 logger.info("Sleep interrupted!");
                 e.printStackTrace();
             }
