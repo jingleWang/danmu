@@ -14,7 +14,7 @@ import java.io.InputStream;
  * @author: luhx
  * @create: 2018/09/26 15:57
  */
-public class ReceiveData implements Runnable{
+public class ReceiveData implements Runnable {
     private TcpSocketClient tcpSocketClient;
     private Logger logger = LoggerFactory.getLogger(ReceiveData.class);
 
@@ -24,7 +24,8 @@ public class ReceiveData implements Runnable{
 
     @Override
     public void run() {
-        while (true) {
+        Boolean runState = true;
+        while (runState) {
             try {
                 ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
                 InputStream inputStream = tcpSocketClient.getSocket().getInputStream();
@@ -36,6 +37,7 @@ public class ReceiveData implements Runnable{
                 byte[] receiveMsg = byteOutput.toByteArray();
                 tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
             } catch (Exception e) {
+                runState = false;
                 logger.info("Receive IO or NullPoint error!");
                 logger.info(e.getMessage());
             }

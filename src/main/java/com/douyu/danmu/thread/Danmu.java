@@ -48,12 +48,13 @@ public class Danmu {
         aliveThread = sendKeepalive();
         logger.info("Danmu start succefully!");
         while (true) {
-            if (receiveThread != null && !receiveThread.isAlive()) {
-                receiveThread = receiveData();
-                logger.info("receiveThread restart succefully!");
-            } else if (aliveThread != null && !aliveThread.isAlive()) {
+            if (receiveThread != null && aliveThread != null && (!aliveThread.isAlive() || !receiveThread.isAlive())) {
+                tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
+                keepaliveSender = new KeepaliveSender(tcpSocketClient);
+                receiveData = new ReceiveData(tcpSocketClient);
                 aliveThread = sendKeepalive();
-                logger.info("aliveThread restart succefully!");
+                receiveThread = receiveData();
+                logger.info("Danmu restart succefully!");
             }
 
         }
