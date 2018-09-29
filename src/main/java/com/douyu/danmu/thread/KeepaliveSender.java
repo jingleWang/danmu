@@ -26,7 +26,7 @@ public class KeepaliveSender implements Runnable {
             try {
                 Thread.sleep(40000);
             } catch (Exception e) {
-                runState = false;
+//                runState = false;
                 logger.info("Sleep interrupted!");
                 e.printStackTrace();
             }
