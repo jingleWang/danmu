@@ -19,6 +19,7 @@ public class Danmu {
     private Thread aliveThread = null;
 
     private String roomID = "265438";
+//    private String roomID = "4466101";
 
     private String danmu_server = "openbarrage.douyutv.com";
 

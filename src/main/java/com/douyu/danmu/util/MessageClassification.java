@@ -24,14 +24,18 @@ public class MessageClassification {
     private static Integer roomState = 0;
 
     public static void classification(Map<String, String> msgMap) {
-
-        String type = msgMap.get("type");
-        if (type.equals("chatmsg")) {
-            chatmsgHandle(msgMap);
-        } else if (type.equals("uenter")) {
-            uenterHandle(msgMap);
-        } else if (type.equals("rss")) {
-            rssHandle(msgMap);
+        try {
+            String type = msgMap.get("type");
+            if (type.equals("chatmsg")) {
+                chatmsgHandle(msgMap);
+            } else if (type.equals("uenter")) {
+                uenterHandle(msgMap);
+            } else if (type.equals("rss")) {
+                rssHandle(msgMap);
+            }
+        } catch (Exception e) {
+            logger.info("数据分发出现异常！！！");
+            logger.info(e.getMessage());
         }
 
     }
@@ -47,21 +51,37 @@ public class MessageClassification {
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            Requests.get(url).send();
+            try {
+                Requests.get(url).send();
+            } catch (Exception e) {
+                logger.info(url + "请求出现异常");
+                logger.info(e.getMessage());
+            }
+
         }
     }
 
     private static void rssHandle(Map<String, String> msgMap) {
         if (msgMap.get("ss").equals("1")) {
-            logger.info("url = http://127.0.0.1:9000/message/startlive" );
+            logger.info("url = http://127.0.0.1:9000/message/startlive");
             roomState = 1;
-            String url = "http://127.0.0:19000/message/startlive";
-            Requests.get(url).send();
+            String url = "http://127.0.0.1:9000/message/startlive";
+            try {
+                Requests.get(url).send();
+            } catch (Exception e) {
+                logger.info(url + "请求出现异常");
+                logger.info(e.getMessage());
+            }
         } else {
-            logger.info("url = http://127.0.0.1:9000/message/stoplive" );
+            logger.info("url = http://127.0.0.1:9000/message/stoplive");
             roomState = 0;
             String url = "http://127.0.0.1:9000/message/stoplive";
-            Requests.get(url).send();
+            try {
+                Requests.get(url).send();
+            } catch (Exception e) {
+                logger.info(url + "请求出现异常");
+                logger.info(e.getMessage());
+            }
         }
     }
 
