@@ -37,7 +37,7 @@ public class ReceiveData implements Runnable {
                 byte[] receiveMsg = byteOutput.toByteArray();
                 tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
             } catch (Exception e) {
-//                runState = false;
+                runState = false;
                 logger.info("Receive IO or NullPoint error!");
                 logger.info(e.getMessage());
             }

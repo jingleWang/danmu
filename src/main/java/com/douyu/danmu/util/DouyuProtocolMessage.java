@@ -56,14 +56,20 @@ public class DouyuProtocolMessage {
 
     public void receivedMessageContent(byte[] receiveMsg) {
         // Copy from stackoverflow
-        String message = bytesToHex(receiveMsg);
-        List<String> messageList = hexStringToStringList(message);
-        for (String msgStr : messageList) {
-            if (msgStr.indexOf("type") > -1) {
-                Map<String, String> msgMap = msgStringToMap(msgStr);
-                MessageClassification.classification(msgMap);
+        try {
+            String message = bytesToHex(receiveMsg);
+            List<String> messageList = hexStringToStringList(message);
+            for (String msgStr : messageList) {
+                if (msgStr.indexOf("type") > -1) {
+                    Map<String, String> msgMap = msgStringToMap(msgStr);
+                    MessageClassification.classification(msgMap);
+                }
             }
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            logger.info("消息处理出现问题！");
         }
+
     }
 
 
