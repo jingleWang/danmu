@@ -51,11 +51,13 @@ public class Danmu {
         while (true) {
             if (aliveThread == null || !aliveThread.isAlive()) {
                 aliveThread = null;
+                keepaliveSender = new KeepaliveSender(tcpSocketClient);
                 aliveThread = sendKeepalive();
                 logger.info("aliveThread restart succefully!");
             }
             if (receiveThread == null || !receiveThread.isAlive()) {
                 receiveThread = null;
+                receiveData = new ReceiveData(tcpSocketClient);
                 tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
                 tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
                 receiveThread = receiveData();

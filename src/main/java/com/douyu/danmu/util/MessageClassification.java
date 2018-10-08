@@ -25,13 +25,15 @@ public class MessageClassification {
 
     public static void classification(Map<String, String> msgMap) {
         try {
-            String type = msgMap.get("type");
-            if (type.equals("chatmsg")) {
-                chatmsgHandle(msgMap);
-            } else if (type.equals("uenter")) {
-                uenterHandle(msgMap);
-            } else if (type.equals("rss")) {
-                rssHandle(msgMap);
+            if (msgMap.containsKey("type")) {
+                String type = msgMap.get("type");
+                if (type.equals("chatmsg")) {
+                    chatmsgHandle(msgMap);
+                } else if (type.equals("uenter")) {
+                    uenterHandle(msgMap);
+                } else if (type.equals("rss")) {
+                    rssHandle(msgMap);
+                }
             }
         } catch (Exception e) {
             logger.info("数据分发出现异常！！！");

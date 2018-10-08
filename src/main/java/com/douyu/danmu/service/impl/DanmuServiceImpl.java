@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.Map;
@@ -27,7 +28,6 @@ public class DanmuServiceImpl implements DanmuService {
 
     public void insertMsg(Map<String, String> msgMap) {
         DanmuBase danmuBase = new DanmuBase();
-        danmuBase.setMsgID(msgMap.get("cid"));
         danmuBase.setUserId(msgMap.get("uid"));
         danmuBase.setUserName(msgMap.get("nn"));
         danmuBase.setUserLevel(msgMap.get("level"));
@@ -37,6 +37,8 @@ public class DanmuServiceImpl implements DanmuService {
         danmuBase.setMsgColor(getMessageColor(msgMap.get("col")));
         danmuBase.setMsgNoble(msgMap.get("nc"));
         danmuBase.setCreateTime(new Date());
+        String id = DigestUtils.md5DigestAsHex((danmuBase.getUserId() + danmuBase.getCreateTime() + danmuBase.getMsg()).getBytes());
+        danmuBase.setMsgID(id);
         logger.info(danmuBase.toString());
         try {
             danmuDao.insertMsg(danmuBase);
