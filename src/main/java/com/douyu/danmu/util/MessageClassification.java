@@ -37,7 +37,7 @@ public class MessageClassification {
             }
         } catch (Exception e) {
             logger.info("数据分发出现异常！！！");
-            logger.info(e.getMessage());
+            e.printStackTrace();
         }
 
     }

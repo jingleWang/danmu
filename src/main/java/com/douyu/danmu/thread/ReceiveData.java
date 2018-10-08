@@ -39,7 +39,7 @@ public class ReceiveData implements Runnable {
             } catch (Exception e) {
                 runState = false;
                 logger.info("Receive IO or NullPoint error!");
-                logger.info(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
