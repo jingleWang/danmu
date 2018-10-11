@@ -12,11 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Danmu {
     private Logger logger = LoggerFactory.getLogger(Danmu.class);
-    private TcpSocketClient tcpSocketClient;
-    private KeepaliveSender keepaliveSender;
-    private ReceiveData receiveData;
-    private Thread receiveThread = null;
-    private Thread aliveThread = null;
+    public static boolean runState = false;
 
     private String roomID = "265438";
 //    private String roomID = "4466101";
@@ -25,45 +21,38 @@ public class Danmu {
 
     private Integer danmu_port = 8601;
 
-    private Thread sendKeepalive() {
+    private void sendKeepalive(KeepaliveSender keepaliveSender) {
         Thread thread = new Thread(keepaliveSender);
         thread.setName("DanmuServerKeepaliveThread");
         thread.start();
-        return thread;
+        logger.info("心跳线程启动成功！");
     }
 
-    private Thread receiveData() {
+    private void receiveData(ReceiveData receiveData) {
         Thread thread = new Thread(receiveData);
         thread.setName("DanmuServerReceiveThread");
         thread.start();
-        return thread;
+        logger.info("消息接收线程启动成功！");
     }
 
-    public void run() {
-        tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
-        keepaliveSender = new KeepaliveSender(tcpSocketClient);
-        receiveData = new ReceiveData(tcpSocketClient);
-        receiveThread = receiveData();
-        tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
-        tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
-        aliveThread = sendKeepalive();
-        logger.info("Danmu start succefully!");
+    public void run(){
         while (true) {
-            if (aliveThread == null || !aliveThread.isAlive()) {
-                aliveThread = null;
-                keepaliveSender = new KeepaliveSender(tcpSocketClient);
-                aliveThread = sendKeepalive();
-                logger.info("aliveThread restart succefully!");
-            }
-            if (receiveThread == null || !receiveThread.isAlive()) {
-                receiveThread = null;
-                receiveData = new ReceiveData(tcpSocketClient);
+            if (Danmu.runState == false) {
+                TcpSocketClient tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
+                KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
+                ReceiveData receiveData = new ReceiveData(tcpSocketClient);
+                receiveData(receiveData);
                 tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
                 tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
-                receiveThread = receiveData();
-                logger.info("receiveThread restart succefully!");
+                sendKeepalive(keepaliveSender);
+                Danmu.runState = true;
+                logger.info("Danmu start succefully!");
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-
     }
 }
