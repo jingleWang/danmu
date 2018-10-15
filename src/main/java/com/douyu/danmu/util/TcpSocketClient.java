@@ -1,5 +1,6 @@
 package com.douyu.danmu.util;
 
+import com.douyu.danmu.thread.Danmu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,8 @@ public class TcpSocketClient {
         try {
             socket.close();
         } catch (IOException e) {
+            Danmu.keepRunState = false;
+            Danmu.receiveRunState = false;
             logger.info(e.getMessage());
         }
     }
@@ -58,6 +61,8 @@ public class TcpSocketClient {
             OutputStream outputStream = socket.getOutputStream();
             outputStream.write(messageContent);
         } catch (IOException e) {
+            Danmu.keepRunState = false;
+            Danmu.receiveRunState = false;
             logger.info(e.getMessage());
         }
     }
