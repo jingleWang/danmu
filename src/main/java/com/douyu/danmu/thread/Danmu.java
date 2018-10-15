@@ -15,8 +15,8 @@ public class Danmu {
     public static boolean keepRunState = false;
     public static boolean receiveRunState = false;
     private String roomID = "265438";
-//    private String roomID = "4466101";
-
+    //    private String roomID = "4466101";
+    private TcpSocketClient tcpSocketClient;
     private String danmu_server = "openbarrage.douyutv.com";
 
     private Integer danmu_port = 8601;
@@ -38,7 +38,7 @@ public class Danmu {
     public void run() {
         while (true) {
             if (Danmu.keepRunState == false && Danmu.receiveRunState == false) {
-                TcpSocketClient tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
+                tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
                 KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
                 ReceiveData receiveData = new ReceiveData(tcpSocketClient);
                 Danmu.receiveRunState = true;
@@ -57,6 +57,8 @@ public class Danmu {
             if (Danmu.receiveRunState == false || Danmu.keepRunState == false) {
                 Danmu.keepRunState = false;
                 Danmu.receiveRunState = false;
+                tcpSocketClient.closeSocket();
+                tcpSocketClient = null;
             }
 
         }
