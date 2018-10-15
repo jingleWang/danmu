@@ -24,7 +24,7 @@ public class ReceiveData implements Runnable {
 
     @Override
     public void run() {
-        while (Danmu.runState) {
+        while (Danmu.receiveRunState) {
             try {
                 ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
                 InputStream inputStream = tcpSocketClient.getSocket().getInputStream();
@@ -36,7 +36,7 @@ public class ReceiveData implements Runnable {
                 byte[] receiveMsg = byteOutput.toByteArray();
                 tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
             } catch (Exception e) {
-                Danmu.runState = false;
+                Danmu.receiveRunState = false;
                 logger.info("Receive IO or NullPoint error!");
                 e.printStackTrace();
             }

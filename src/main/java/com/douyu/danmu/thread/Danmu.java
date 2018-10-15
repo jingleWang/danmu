@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Danmu {
     private Logger logger = LoggerFactory.getLogger(Danmu.class);
-    public static boolean runState = false;
-
+    public static boolean keepRunState = false;
+    public static boolean receiveRunState = false;
     private String roomID = "265438";
 //    private String roomID = "4466101";
 
@@ -35,17 +35,18 @@ public class Danmu {
         logger.info("消息接收线程启动成功！");
     }
 
-    public void run(){
+    public void run() {
         while (true) {
-            if (Danmu.runState == false) {
+            if (Danmu.keepRunState == false && Danmu.receiveRunState == false) {
                 TcpSocketClient tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
                 KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
                 ReceiveData receiveData = new ReceiveData(tcpSocketClient);
+                Danmu.receiveRunState = true;
                 receiveData(receiveData);
                 tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
                 tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
+                Danmu.keepRunState = true;
                 sendKeepalive(keepaliveSender);
-                Danmu.runState = true;
                 logger.info("Danmu start succefully!");
             }
             try {
@@ -53,6 +54,11 @@ public class Danmu {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (Danmu.receiveRunState == false || Danmu.keepRunState == false) {
+                Danmu.keepRunState = false;
+                Danmu.receiveRunState = false;
+            }
+
         }
     }
 }
