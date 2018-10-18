@@ -14,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @create: 2018/09/27 11:49
  */
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Danmu danmu = new Danmu();
         danmu.run();
     }
