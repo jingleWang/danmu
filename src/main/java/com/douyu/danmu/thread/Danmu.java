@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Danmu {
     private Logger logger = LoggerFactory.getLogger(Danmu.class);
-    public static boolean keepRunState = false;
-    public static boolean receiveRunState = false;
+    public static boolean runState = false;
     private String roomID = "265438";
     //    private String roomID = "4466101";
     private TcpSocketClient tcpSocketClient;
@@ -35,32 +34,25 @@ public class Danmu {
         logger.info("消息接收线程启动成功！");
     }
 
-    public void run() {
+    public void run() throws InterruptedException {
         while (true) {
-            if (Danmu.keepRunState == false && Danmu.receiveRunState == false) {
+            if (Danmu.runState == false) {
+                if (tcpSocketClient != null) {
+                    tcpSocketClient.closeSocket();
+                    Thread.sleep(5000);
+                    tcpSocketClient = null;
+                }
                 tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
                 KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
                 ReceiveData receiveData = new ReceiveData(tcpSocketClient);
-                Danmu.receiveRunState = true;
+                Danmu.runState = true;
                 receiveData(receiveData);
                 tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
                 tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
-                Danmu.keepRunState = true;
                 sendKeepalive(keepaliveSender);
                 logger.info("Danmu start succefully!");
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (Danmu.receiveRunState == false || Danmu.keepRunState == false) {
-                Danmu.keepRunState = false;
-                Danmu.receiveRunState = false;
-                tcpSocketClient.closeSocket();
-                tcpSocketClient = null;
-            }
-
+            Thread.sleep(5000);
         }
     }
 }

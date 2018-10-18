@@ -44,9 +44,7 @@ public class TcpSocketClient {
         try {
             socket.close();
         } catch (IOException e) {
-            Danmu.keepRunState = false;
-            Danmu.receiveRunState = false;
-            logger.info(e.getMessage());
+            logger.info("closeSoclet: " + e.getMessage());
         }
     }
 
@@ -61,9 +59,8 @@ public class TcpSocketClient {
             OutputStream outputStream = socket.getOutputStream();
             outputStream.write(messageContent);
         } catch (IOException e) {
-            Danmu.keepRunState = false;
-            Danmu.receiveRunState = false;
-            logger.info(e.getMessage());
+            logger.info("sendData: " + e.getMessage());
+            Danmu.runState = false;
         }
     }
 

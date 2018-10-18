@@ -20,12 +20,12 @@ public class KeepaliveSender implements Runnable {
 
     @Override
     public void run() {
-        while (Danmu.keepRunState) {
+        while (Danmu.runState) {
             this.tcpSocketClient.sendData("type@=mrkl/");
             try {
                 Thread.sleep(40000);
             } catch (Exception e) {
-                Danmu.keepRunState = false;
+                Danmu.runState = false;
                 logger.info("Sleep interrupted!");
                 e.printStackTrace();
             }
