@@ -44,11 +44,12 @@ public class TcpSocketClient {
         try {
             socket.close();
         } catch (IOException e) {
-            logger.info("closeSoclet: " + e.getMessage());
+            logger.info("closeSocket: " + e.getMessage());
         }
     }
 
     public void sendData(String content) {
+        logger.info("sendData: " + content);
         byte[] messageContent = null;
         try {
             messageContent = douyuProtocolMessage.sendMessageContent(content);

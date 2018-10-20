@@ -38,6 +38,7 @@ public class Danmu {
         while (true) {
             if (Danmu.runState == false) {
                 if (tcpSocketClient != null) {
+                    Thread.sleep(5000);
                     tcpSocketClient.closeSocket();
                     Thread.sleep(5000);
                     tcpSocketClient = null;
@@ -52,7 +53,7 @@ public class Danmu {
                 sendKeepalive(keepaliveSender);
                 logger.info("Danmu start succefully!");
             }
-            Thread.sleep(5000);
+            Thread.sleep(85000);
         }
     }
 }
