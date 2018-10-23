@@ -72,7 +72,7 @@ public class MessageClassification {
     }
 
     private static void sendGetRequest(String url) {
-        int retry = 5;
+        int retry = 2;
         while (retry > 0) {
             try {
                 Requests.get(url).send();
