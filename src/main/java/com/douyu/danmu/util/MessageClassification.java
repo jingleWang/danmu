@@ -53,13 +53,7 @@ public class MessageClassification {
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            try {
-                Requests.get(url).send();
-            } catch (Exception e) {
-                logger.info(url + "请求出现异常");
-                logger.info(e.getMessage());
-            }
-
+            sendGetRequest(url);
         }
     }
 
@@ -68,19 +62,23 @@ public class MessageClassification {
             logger.info("url = http://127.0.0.1:9000/message/startlive");
             roomState = 1;
             String url = "http://127.0.0.1:9000/message/startlive";
-            try {
-                Requests.get(url).send();
-            } catch (Exception e) {
-                logger.info(url + "请求出现异常");
-                logger.info(e.getMessage());
-            }
+            sendGetRequest(url);
         } else {
             logger.info("url = http://127.0.0.1:9000/message/stoplive");
             roomState = 0;
             String url = "http://127.0.0.1:9000/message/stoplive";
+            sendGetRequest(url);
+        }
+    }
+
+    private static void sendGetRequest(String url) {
+        int retry = 5;
+        while (retry > 0) {
             try {
                 Requests.get(url).send();
+                break;
             } catch (Exception e) {
+                retry--;
                 logger.info(url + "请求出现异常");
                 logger.info(e.getMessage());
             }
