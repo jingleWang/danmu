@@ -3,11 +3,14 @@ package com.douyu.danmu.util;
 import com.douyu.danmu.service.DanmuService;
 
 import net.dongliu.requests.Requests;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -75,8 +78,12 @@ public class MessageClassification {
         int retry = 2;
         while (retry > 0) {
             try {
-                Requests.get(url).send();
-                break;
+                Map resultMap = Requests.get(url).timeout(120000, 120000).send().readToJson(Map.class);
+                logger.info(resultMap.toString());
+                if (StringUtils.equals(MapUtils.getString(resultMap, "code"), "1000")) {
+                    break;
+                }
+                retry--;
             } catch (Exception e) {
                 retry--;
                 logger.info(url + "请求出现异常");
