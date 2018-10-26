@@ -26,7 +26,7 @@ public class MessageClassification {
     private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
     private static DanmuService danmuService = (DanmuService) applicationContext.getBean("danmuServiceImpl");
     private static Logger logger = LoggerFactory.getLogger(MessageClassification.class);
-    public static Integer roomState = 1;
+    public static Integer roomState = 0;
 
     public static void classification(Map<String, String> msgMap) {
         try {
