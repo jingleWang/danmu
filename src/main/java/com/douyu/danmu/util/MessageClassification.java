@@ -1,5 +1,7 @@
 package com.douyu.danmu.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.douyu.danmu.service.DanmuService;
 
 import net.dongliu.requests.Requests;
@@ -24,7 +26,7 @@ public class MessageClassification {
     private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
     private static DanmuService danmuService = (DanmuService) applicationContext.getBean("danmuServiceImpl");
     private static Logger logger = LoggerFactory.getLogger(MessageClassification.class);
-    public static Integer roomState = 0;
+    public static Integer roomState = 1;
 
     public static void classification(Map<String, String> msgMap) {
         try {
@@ -78,9 +80,9 @@ public class MessageClassification {
         int retry = 2;
         while (retry > 0) {
             try {
-                Map resultMap = Requests.get(url).timeout(120000, 120000).send().readToJson(Map.class);
-                logger.info(resultMap.toString());
-                if (StringUtils.equals(MapUtils.getString(resultMap, "code"), "1000")) {
+                JSONObject jb = JSON.parseObject(Requests.get(url).timeout(120000, 120000).send().readToText());
+                logger.info(jb.toString());
+                if (StringUtils.equals(jb.getString("code"), "1000")) {
                     break;
                 }
                 retry--;
@@ -88,6 +90,11 @@ public class MessageClassification {
                 retry--;
                 logger.info(url + "请求出现异常");
                 logger.info(e.getMessage());
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
