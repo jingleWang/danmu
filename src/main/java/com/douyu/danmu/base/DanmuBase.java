@@ -18,6 +18,7 @@ public class DanmuBase {
     private String msg; //弹幕信息
     private String msgColor; //弹幕的颜色
     private String msgNoble; //是否为贵族弹幕
+    private Integer liveStatus; //开播状态
     private Date createTime; //发送时间
 
 
@@ -93,6 +94,14 @@ public class DanmuBase {
         this.msgNoble = msgNoble;
     }
 
+    public Integer getLiveStatus() {
+        return liveStatus;
+    }
+
+    public void setLiveStatus(Integer liveStatus) {
+        this.liveStatus = liveStatus;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -113,6 +122,7 @@ public class DanmuBase {
                 ", msg='" + msg + '\'' +
                 ", msgColor='" + msgColor + '\'' +
                 ", msgNoble='" + msgNoble + '\'' +
+                ", liveStatus=" + liveStatus +
                 ", createTime=" + createTime +
                 '}';
     }

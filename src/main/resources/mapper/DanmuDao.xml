@@ -5,6 +5,6 @@
 
 <mapper namespace="com.douyu.danmu.dao.DanmuDao">
     <insert id="insertMsg" parameterType="com.douyu.danmu.base.DanmuBase">
-      INSERT INTO danmu values (#{msgID},#{userId},#{userName},#{userLevel},#{fansName},#{fansLevel},#{msg},#{msgColor},#{msgNoble},#{createTime})
+      INSERT INTO danmu values (#{msgID},#{userId},#{userName},#{userLevel},#{fansName},#{fansLevel},#{msg},#{msgColor},#{msgNoble},#{liveStatus},#{createTime})
     </insert>
 </mapper>
