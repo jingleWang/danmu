@@ -4,14 +4,12 @@ import com.douyu.danmu.base.DanmuBase;
 import com.douyu.danmu.dao.DanmuDao;
 import com.douyu.danmu.service.DanmuService;
 
-import com.douyu.danmu.util.DouyuProtocolMessage;
 import com.douyu.danmu.util.MessageClassification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import sun.plugin2.message.Message;
 
 import java.util.Date;
 import java.util.Map;
