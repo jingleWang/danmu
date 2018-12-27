@@ -24,8 +24,4 @@ public class ZeroMQUtil {
         push.send(msg.getBytes());
     }
 
-    public static void main(String[] args) {
-        ZeroMQUtil zeroMQUtil = new ZeroMQUtil();
-        zeroMQUtil.sendZeroMQMsg("#res");
-    }
 }
