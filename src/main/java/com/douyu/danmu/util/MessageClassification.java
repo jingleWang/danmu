@@ -2,6 +2,7 @@ package com.douyu.danmu.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.douyu.Application;
 import com.douyu.danmu.service.DanmuService;
 
 import net.dongliu.requests.Requests;
@@ -25,7 +26,6 @@ public class MessageClassification {
 
     private static ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
     private static DanmuService danmuService = (DanmuService) applicationContext.getBean("danmuServiceImpl");
-    private static ZeroMQUtil zeroMQUtil = (ZeroMQUtil) applicationContext.getBean("zeroMQUtil");
     private static Logger logger = LoggerFactory.getLogger(MessageClassification.class);
     public static Integer roomState = 0;
 
@@ -54,17 +54,17 @@ public class MessageClassification {
     }
 
     private static void blabHandle(Map<String, String> msgMap) {
-        zeroMQUtil.sendZeroMQMsg("恭喜" + msgMap.get("nn") + "粉丝牌升级到" + msgMap.get("bl") + "级！！！");
+        Application.concurrentLinkedQueue.add("恭喜" + msgMap.get("nn") + "粉丝牌升级到" + msgMap.get("bl") + "级！！！");
     }
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
             if (roomState == 0)
-                zeroMQUtil.sendZeroMQMsg("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+                Application.concurrentLinkedQueue.add("感谢" + msgMap.get("nn") + "赠送的礼物！！");
             else {
                 if (msgMap.containsKey("bg")) {
-                    zeroMQUtil.sendZeroMQMsg("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+                    Application.concurrentLinkedQueue.add("感谢" + msgMap.get("nn") + "赠送的礼物！！");
                 }
             }
         }
@@ -83,11 +83,11 @@ public class MessageClassification {
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            zeroMQUtil.sendZeroMQMsg("欢迎小仙女进入直播间！！！");
+            Application.concurrentLinkedQueue.add("欢迎小仙女进入直播间！！！");
             sendGetRequest(url);
         } else {
             if (roomState == 0)
-                zeroMQUtil.sendZeroMQMsg("欢迎" + msgMap.get("nn") + "进入直播间！您的光临使本直播间蓬荜生辉！");
+                Application.concurrentLinkedQueue.add("欢迎" + msgMap.get("nn") + "进入直播间！您的光临使本直播间蓬荜生辉！");
         }
     }
 
@@ -96,7 +96,7 @@ public class MessageClassification {
             logger.info("url = http://127.0.0.1:9000/message/startlive");
             roomState = 1;
             String url = "http://127.0.0.1:9000/message/startlive";
-            zeroMQUtil.sendZeroMQMsg("#refresh");
+            Application.concurrentLinkedQueue.add("#refresh");
             sendGetRequest(url);
         } else {
             logger.info("url = http://127.0.0.1:9000/message/stoplive");
