@@ -60,4 +60,5 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <context:component-scan base-package="com.douyu.danmu.service.impl"/>
+    <context:component-scan base-package="com.douyu.danmu.util"/>
 </beans>
