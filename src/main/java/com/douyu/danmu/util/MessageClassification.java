@@ -39,6 +39,7 @@ public class MessageClassification {
                     uenterHandle(msgMap);
                 } else if (type.equals("rss")) {
                     rssHandle(msgMap);
+
                 } else if (type.equals("dgb")) {
                     dgbHandle(msgMap);
                 } else if (type.equals("blab")) {
@@ -58,12 +59,19 @@ public class MessageClassification {
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
-        if (!msgMap.get("bg").equals("0") && msgMap.get("hits").equals("1")) {
-            zeroMQUtil.sendZeroMQMsg("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+        if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
+            if (roomState == 0)
+                zeroMQUtil.sendZeroMQMsg("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+            else {
+                if (msgMap.containsKey("bg")) {
+                    zeroMQUtil.sendZeroMQMsg("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+                }
+            }
         }
     }
 
     private static void chatmsgHandle(Map<String, String> msgMap) {
+        logger.info("chatmsgHandle");
         if (msgMap.containsKey("cid")) {
             danmuService.insertMsg(msgMap);
         }
@@ -71,6 +79,7 @@ public class MessageClassification {
     }
 
     private static void uenterHandle(Map<String, String> msgMap) {
+        logger.info("uenterHandle");
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";

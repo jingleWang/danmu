@@ -1,5 +1,7 @@
 package com.douyu.danmu.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.zeromq.ZMQ;
 
@@ -13,15 +15,17 @@ import org.zeromq.ZMQ;
 public class ZeroMQUtil {
 
     private final ZMQ.Socket push;
+    private static final Logger logger = LoggerFactory.getLogger(ZeroMQUtil.class);
 
     public ZeroMQUtil() {
         ZMQ.Context context = ZMQ.context(1);
-        push = context.socket(ZMQ.PUSH);
-        push.bind("tcp://127.0.0.1:10002");
+        push = context.socket(ZMQ.PUB);
+        push.bind("tcp://*:10002");
     }
 
     public void sendZeroMQMsg(String msg) {
-//        push.send(msg.getBytes());
+        logger.info("sendZeroMQMsg " + msg);
+        push.send(msg.getBytes());
     }
 
 }
