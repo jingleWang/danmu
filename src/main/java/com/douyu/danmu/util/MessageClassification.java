@@ -87,7 +87,7 @@ public class MessageClassification {
             sendGetRequest(url);
         } else {
             if (roomState == 0)
-                Application.concurrentLinkedQueue.add("欢迎" + msgMap.get("nn") + "进入直播间！您的光临使本直播间蓬荜生辉！");
+                Application.concurrentLinkedQueue.add("欢迎" + msgMap.get("nn") + "进入小仙女的直播间！");
         }
     }
 
