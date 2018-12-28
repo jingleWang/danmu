@@ -84,7 +84,6 @@ public class MessageClassification {
 
     private static void uenterHandle(Map<String, String> msgMap) {
         logger.info("uenterHandle");
-        Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
