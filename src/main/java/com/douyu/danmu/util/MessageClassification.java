@@ -54,17 +54,21 @@ public class MessageClassification {
     }
 
     private static void blabHandle(Map<String, String> msgMap) {
-        Application.concurrentLinkedQueue.add("恭喜" + msgMap.get("nn") + "粉丝牌升级到" + msgMap.get("bl") + "级！！！");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "blab");
+        jsonObject.put("nn", msgMap.get("nn"));
+        jsonObject.put("bl", msgMap.get("bl"));
+        Application.concurrentLinkedQueue.add(jsonObject.toJSONString());
     }
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
             if (roomState == 0)
-                Application.concurrentLinkedQueue.add("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+                Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
             else {
                 if (msgMap.containsKey("bg")) {
-                    Application.concurrentLinkedQueue.add("感谢" + msgMap.get("nn") + "赠送的礼物！！");
+                    Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
                 }
             }
         }
@@ -80,14 +84,15 @@ public class MessageClassification {
 
     private static void uenterHandle(Map<String, String> msgMap) {
         logger.info("uenterHandle");
+        Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            Application.concurrentLinkedQueue.add("欢迎小仙女进入直播间！！！");
+            Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
             sendGetRequest(url);
         } else {
             if (roomState == 0)
-                Application.concurrentLinkedQueue.add("欢迎" + msgMap.get("nn") + "进入小仙女的直播间！");
+                Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
         }
     }
 
