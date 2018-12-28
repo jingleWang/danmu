@@ -32,7 +32,12 @@ public class ZeroMQUtil implements Runnable {
     public void run() {
         while (true) {
             if (Application.concurrentLinkedQueue.size() > 0) {
-                sendZeroMQMsg(Application.concurrentLinkedQueue.poll());
+                try {
+                    sendZeroMQMsg(Application.concurrentLinkedQueue.take());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    logger.info(e.getMessage());
+                }
             }
         }
     }
