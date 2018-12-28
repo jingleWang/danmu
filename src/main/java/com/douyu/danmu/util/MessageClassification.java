@@ -67,7 +67,7 @@ public class MessageClassification {
             if (roomState == 0)
                 Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
             else {
-                if (msgMap.containsKey("bg")) {
+                if (msgMap.containsKey("bg") && !msgMap.get("bg").equals("0")) {
                     Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
                 }
             }
