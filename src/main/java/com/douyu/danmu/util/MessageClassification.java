@@ -63,14 +63,9 @@ public class MessageClassification {
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
+
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
-            if (roomState == 0)
-                Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
-            else {
-                if (msgMap.containsKey("bg") && !msgMap.get("bg").equals("0")) {
-                    Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
-                }
-            }
+            Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.douyu.danmu.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,10 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DouyuProtocolMessage {
     private int[] messageLength;
@@ -58,12 +56,10 @@ public class DouyuProtocolMessage {
         // Copy from stackoverflow
         try {
             String message = bytesToHex(receiveMsg);
-            List<String> messageList = hexStringToStringList(message);
-            for (String msgStr : messageList) {
-                if (msgStr.indexOf("type") > -1) {
-                    Map<String, String> msgMap = msgStringToMap(msgStr);
-                    MessageClassification.classification(msgMap);
-                }
+
+            List<Map<String, String>> messageList = hexStringToStringList(message);
+            for (Map<String, String> msgMap : messageList) {
+                MessageClassification.classification(msgMap);
             }
         } catch (Exception e) {
             logger.info(e.getMessage());
@@ -83,25 +79,17 @@ public class DouyuProtocolMessage {
         return new String(hexChars);
     }
 
-    private static Map<String, String> msgStringToMap(String msgStr) {
-        Map<String, String> resultMap = new HashMap<String, String>();
-        msgStr = msgStr.replace("@A", "@");
-        for (String itme : msgStr.split("/")) {
-            itme = itme.replace("@S", "/");
-            String[] strings = itme.split("@=");
-            if (strings.length < 2) {
-                continue;
-            }
-            resultMap.put(strings[0].trim(), strings[1].trim());
-        }
-        return resultMap;
+    private static String transferStr(String str) {
+        str = str.replace("@S", "/");
+        str = str.replace("@A", "@");
+        return str;
     }
 
-
-    private static List<String> hexStringToStringList(String s) {
+    private static List<Map<String, String>> hexStringToStringList(String s) {
         if (s == null || s.equals("")) {
             return null;
         }
+        List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
         s = s.replace(" ", "");
         byte[] baKeyword = new byte[s.length() / 2];
         for (int i = 0; i < baKeyword.length; i++) {
@@ -113,24 +101,23 @@ public class DouyuProtocolMessage {
         }
         try {
             s = new String(baKeyword, "UTF-8");
-            new String();
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-        List<String> types = new ArrayList<String>();
-        for (String type : s.split("type")) {
-            if (type.indexOf("@=") == 0) {
-                String tempStr = "type" + type;
-                StringBuilder sb = new StringBuilder();
-                for (String str : tempStr.split("/")) {
-                    if (str.indexOf("@=") > -1) {
-                        sb.append(str);
-                        sb.append("/");
+        for (String firstStr : s.split("\0")) {
+            if (firstStr.split("type").length == 2) {
+                Map<String, String> map = new LinkedHashMap<String, String>();
+                for (String secondStr : firstStr.split("/")) {
+                    String str[] = secondStr.split("@=");
+                    if (str.length > 1) {
+                        String key = transferStr(str[0]);
+                        String value = transferStr(str[1]);
+                        map.put(key, value);
                     }
                 }
-                types.add(sb.toString());
+                resultList.add(map);
             }
         }
-        return types;
+        return resultList;
     }
 }
