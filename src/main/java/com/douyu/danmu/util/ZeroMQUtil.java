@@ -1,5 +1,6 @@
 package com.douyu.danmu.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.douyu.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class ZeroMQUtil implements Runnable {
         while (true) {
             if (Application.concurrentLinkedQueue.size() > 0) {
                 try {
-                    sendZeroMQMsg(Application.concurrentLinkedQueue.take());
+                    sendZeroMQMsg(JSONObject.toJSONString(Application.concurrentLinkedQueue.take()));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     logger.info(e.getMessage());

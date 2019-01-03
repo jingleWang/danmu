@@ -32,6 +32,7 @@ public class MessageClassification {
     public static void classification(Map<String, String> msgMap) {
         try {
             if (msgMap.containsKey("type")) {
+                msgMap.put("roomState", roomState.toString());
                 String type = msgMap.get("type");
                 if (type.equals("chatmsg")) {
                     chatmsgHandle(msgMap);
@@ -54,18 +55,21 @@ public class MessageClassification {
     }
 
     private static void blabHandle(Map<String, String> msgMap) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "blab");
-        jsonObject.put("nn", msgMap.get("nn"));
-        jsonObject.put("bl", msgMap.get("bl"));
-        Application.concurrentLinkedQueue.add(jsonObject.toJSONString());
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("type", "blab");
+        map.put("nn", msgMap.get("nn"));
+        map.put("bl", msgMap.get("bl"));
+        Application.concurrentLinkedQueue.add(map);
     }
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
 
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
-            Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
+            if (roomState == 1 && !msgMap.containsKey("bg")) {
+                return;
+            }
+            Application.concurrentLinkedQueue.add(msgMap);
         }
     }
 
@@ -82,11 +86,11 @@ public class MessageClassification {
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
+            Application.concurrentLinkedQueue.add(msgMap);
             sendGetRequest(url);
         } else {
-            if (roomState == 0)
-                Application.concurrentLinkedQueue.add(JSONObject.toJSONString(msgMap));
+            if (roomState == 1)
+                Application.concurrentLinkedQueue.add(msgMap);
         }
     }
 
@@ -95,7 +99,6 @@ public class MessageClassification {
             logger.info("url = http://127.0.0.1:9000/message/startlive");
             roomState = 1;
             String url = "http://127.0.0.1:9000/message/startlive";
-            Application.concurrentLinkedQueue.add("#refresh");
             sendGetRequest(url);
         } else {
             logger.info("url = http://127.0.0.1:9000/message/stoplive");

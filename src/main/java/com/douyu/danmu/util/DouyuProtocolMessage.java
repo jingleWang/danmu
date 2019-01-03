@@ -86,10 +86,10 @@ public class DouyuProtocolMessage {
     }
 
     private static List<Map<String, String>> hexStringToStringList(String s) {
-        if (s == null || s.equals("")) {
-            return null;
-        }
         List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+        if (s == null || s.equals("")) {
+            return resultList;
+        }
         s = s.replace(" ", "");
         byte[] baKeyword = new byte[s.length() / 2];
         for (int i = 0; i < baKeyword.length; i++) {
@@ -115,7 +115,8 @@ public class DouyuProtocolMessage {
                         map.put(key, value);
                     }
                 }
-                resultList.add(map);
+                if (map.size() > 0)
+                    resultList.add(map);
             }
         }
         return resultList;
