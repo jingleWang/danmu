@@ -66,9 +66,6 @@ public class MessageClassification {
     private static void dgbHandle(Map<String, String> msgMap) {
 
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
-            if (roomState == 1 && !msgMap.containsKey("bg")) {
-                return;
-            }
             Application.concurrentLinkedQueue.add(msgMap);
         }
     }
