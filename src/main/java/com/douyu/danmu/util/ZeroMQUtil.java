@@ -32,14 +32,14 @@ public class ZeroMQUtil implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if (Application.concurrentLinkedQueue.size() > 0) {
-                try {
-                    sendZeroMQMsg(JSONObject.toJSONString(Application.concurrentLinkedQueue.take()));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    logger.info(e.getMessage());
-                }
-            }
+//            if (Application.concurrentLinkedQueue.size() > 0) {
+//                try {
+//                    sendZeroMQMsg(JSONObject.toJSONString(Application.concurrentLinkedQueue.take()));
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                    logger.info(e.getMessage());
+//                }
+//            }
         }
     }
 }

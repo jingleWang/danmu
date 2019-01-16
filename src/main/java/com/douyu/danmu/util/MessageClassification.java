@@ -40,7 +40,6 @@ public class MessageClassification {
                     uenterHandle(msgMap);
                 } else if (type.equals("rss")) {
                     rssHandle(msgMap);
-
                 } else if (type.equals("dgb")) {
                     dgbHandle(msgMap);
                 } else if (type.equals("blab")) {
@@ -59,14 +58,14 @@ public class MessageClassification {
         map.put("type", "blab");
         map.put("nn", msgMap.get("nn"));
         map.put("bl", msgMap.get("bl"));
-        Application.concurrentLinkedQueue.add(map);
+//        Application.concurrentLinkedQueue.add(map);
     }
 
     //赠送礼物
     private static void dgbHandle(Map<String, String> msgMap) {
 
         if (msgMap.get("hits").equals(msgMap.get("gfcnt"))) {
-            Application.concurrentLinkedQueue.add(msgMap);
+//            Application.concurrentLinkedQueue.add(msgMap);
         }
     }
 
@@ -83,11 +82,11 @@ public class MessageClassification {
         if (msgMap.get("nn").equals("刘飞儿faye") && roomState == 0) {
             logger.info("url = http://127.0.0.1:9000/message/intoroom");
             String url = "http://127.0.0.1:9000/message/intoroom";
-            Application.concurrentLinkedQueue.add(msgMap);
+//            Application.concurrentLinkedQueue.add(msgMap);
             sendGetRequest(url);
         } else {
-            if (roomState == 1)
-                Application.concurrentLinkedQueue.add(msgMap);
+            if (roomState == 1);
+//                Application.concurrentLinkedQueue.add(msgMap);
         }
     }
 

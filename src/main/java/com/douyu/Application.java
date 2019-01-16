@@ -18,11 +18,11 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @create: 2018/09/27 11:49
  */
 public class Application {
-    public static LinkedBlockingQueue<Map<String, String>> concurrentLinkedQueue = new LinkedBlockingQueue<Map<String, String>>();
+//    public static LinkedBlockingQueue<Map<String, String>> concurrentLinkedQueue = new LinkedBlockingQueue<Map<String, String>>();
 
     public static void main(String[] args) throws InterruptedException {
-        Thread thread = new Thread(new ZeroMQUtil());
-        thread.start();
+//        Thread thread = new Thread(new ZeroMQUtil());
+//        thread.start();
         Danmu danmu = new Danmu();
         danmu.run();
     }
