@@ -36,24 +36,29 @@ public class Danmu {
 
     public void run() throws InterruptedException {
         while (true) {
-            if (Danmu.runState == false) {
-                if (tcpSocketClient != null) {
-                    Thread.sleep(5000);
-                    tcpSocketClient.closeSocket();
-                    Thread.sleep(5000);
-                    tcpSocketClient = null;
+            try {
+                if (Danmu.runState == false) {
+                    if (tcpSocketClient != null) {
+                        Thread.sleep(5000);
+                        tcpSocketClient.closeSocket();
+                        Thread.sleep(5000);
+                        tcpSocketClient = null;
+                    }
+                    tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
+                    KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
+                    ReceiveData receiveData = new ReceiveData(tcpSocketClient);
+                    Danmu.runState = true;
+                    receiveData(receiveData);
+                    tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
+                    tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
+                    sendKeepalive(keepaliveSender);
+                    logger.info("Danmu start succefully!");
                 }
-                tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
-                KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
-                ReceiveData receiveData = new ReceiveData(tcpSocketClient);
-                Danmu.runState = true;
-                receiveData(receiveData);
-                tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
-                tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
-                sendKeepalive(keepaliveSender);
-                logger.info("Danmu start succefully!");
+                Thread.sleep(85000);
+            } catch (Exception e) {
+                Danmu.runState = false;
+                Thread.sleep(5000);
             }
-            Thread.sleep(85000);
         }
     }
 }
