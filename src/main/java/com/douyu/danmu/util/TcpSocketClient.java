@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * @program sendmessage
@@ -36,7 +34,10 @@ public class TcpSocketClient {
     public Boolean openSocket() {
         try {
             logger.info("Connect to Server {}:{}.", host.getHostAddress(), port);
-            this.socket = new Socket(this.host, this.port);
+
+            SocketAddress socketAddress = new InetSocketAddress(this.host, this.port);
+            this.socket = new Socket();
+            this.socket.connect(socketAddress,10000);
             logger.info("Open Socket successfully");
             return true;
         } catch (IOException e) {
