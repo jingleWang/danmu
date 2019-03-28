@@ -33,7 +33,7 @@ public class ReceiveData implements Runnable {
                     int line = 0;
                     line = inputStream.read(msg);
                     logger.info("msgLength = " + msg.length + " line = " + line);
-                    if (msg.length > 0 || msg.length >= line) {
+                    if (line > 0) {
                         byteOutput.write(msg, 0, line);
                         byte[] receiveMsg = byteOutput.toByteArray();
                         tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
