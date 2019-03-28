@@ -32,6 +32,7 @@ public class ReceiveData implements Runnable {
                     byte[] msg = new byte[1024000];
                     int line = 0;
                     line = inputStream.read(msg);
+                    logger.info("msgLength = " + msg.length + " line = " + line);
                     if (msg.length > 0 || msg.length >= line) {
                         byteOutput.write(msg, 0, line);
                         byte[] receiveMsg = byteOutput.toByteArray();

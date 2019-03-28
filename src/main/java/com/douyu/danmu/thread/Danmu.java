@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Danmu {
     private Logger logger = LoggerFactory.getLogger(Danmu.class);
-    public static boolean runState = false;
+    public static volatile boolean runState = false;
     private String roomID = "265438";
     //    private String roomID = "4466101";
     private TcpSocketClient tcpSocketClient;
