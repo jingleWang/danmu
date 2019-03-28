@@ -39,13 +39,12 @@ public class Danmu {
             try {
                 if (Danmu.runState == false) {
                     if (tcpSocketClient != null && tcpSocketClient.getSocket() != null) {
-                        Thread.sleep(5000);
                         tcpSocketClient.closeSocket();
-                        Thread.sleep(5000);
                         tcpSocketClient = null;
                     }
                     tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
                     while (tcpSocketClient.openSocket() == false) {
+                        Thread.sleep(5000);
                     }
                     Danmu.runState = true;
                     KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
