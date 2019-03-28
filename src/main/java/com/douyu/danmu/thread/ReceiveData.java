@@ -37,6 +37,9 @@ public class ReceiveData implements Runnable {
                         byteOutput.write(msg, 0, line);
                         byte[] receiveMsg = byteOutput.toByteArray();
                         tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
+                    } else {
+                        Danmu.runState = false;
+                        break;
                     }
                 }
             } catch (Exception e) {
