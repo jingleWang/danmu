@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * @program sendmessage
@@ -19,22 +20,32 @@ public class TcpSocketClient {
     private Logger logger = LoggerFactory.getLogger(TcpSocketClient.class);
     private InetAddress host;
     private int port;
-    private Socket socket;
+    private Socket socket = null;
     private DouyuProtocolMessage douyuProtocolMessage;
 
     public TcpSocketClient(String server, int port) {
         try {
             this.host = InetAddress.getByName(server);
-            this.port = port;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        this.port = port;
+        douyuProtocolMessage = new DouyuProtocolMessage();
+    }
+
+    public Boolean openSocket() {
+        try {
             logger.info("Connect to Server {}:{}.", host.getHostAddress(), port);
             this.socket = new Socket(this.host, this.port);
             logger.info("Open Socket successfully");
+            return true;
         } catch (IOException e) {
             logger.info("Open socket fail");
             logger.info(e.getMessage());
         }
-        douyuProtocolMessage = new DouyuProtocolMessage();
+        return false;
     }
+
 
     public Socket getSocket() {
         return socket;

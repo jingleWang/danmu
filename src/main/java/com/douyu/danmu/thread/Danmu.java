@@ -38,16 +38,18 @@ public class Danmu {
         while (true) {
             try {
                 if (Danmu.runState == false) {
-                    if (tcpSocketClient != null) {
+                    if (tcpSocketClient != null && tcpSocketClient.getSocket() != null) {
                         Thread.sleep(5000);
                         tcpSocketClient.closeSocket();
                         Thread.sleep(5000);
                         tcpSocketClient = null;
                     }
                     tcpSocketClient = new TcpSocketClient(danmu_server, danmu_port);
+                    while (tcpSocketClient.openSocket() == false) {
+                    }
+                    Danmu.runState = true;
                     KeepaliveSender keepaliveSender = new KeepaliveSender(tcpSocketClient);
                     ReceiveData receiveData = new ReceiveData(tcpSocketClient);
-                    Danmu.runState = true;
                     receiveData(receiveData);
                     tcpSocketClient.sendData("type@=loginreq/roomid@=" + roomID + "/");
                     tcpSocketClient.sendData("type@=joingroup/rid@=" + roomID + "/gid@=-9999/");
