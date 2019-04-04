@@ -29,23 +29,25 @@ public class ReceiveData implements Runnable {
                 if (Danmu.runState) {
                     ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
                     InputStream inputStream = tcpSocketClient.getSocket().getInputStream();
-                    byte[] msg = new byte[1024000];
+                    byte[] msg = new byte[10240];
                     int line = 0;
-                    line = inputStream.read(msg);
-                    logger.info("msgLength = " + msg.length + " line = " + line);
-                    if (line > 0) {
-                        byteOutput.write(msg, 0, line);
-                        byte[] receiveMsg = byteOutput.toByteArray();
-                        tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
-                    } else {
-                        Danmu.runState = false;
-                        break;
+                    if (inputStream.available()!=0){
+                        line = inputStream.read(msg);
+                        logger.info("line = " + line);
+                        if (line > 0) {
+                            byteOutput.write(msg, 0, line);
+                            byte[] receiveMsg = byteOutput.toByteArray();
+                            tcpSocketClient.getDouyuProtocolMessage().receivedMessageContent(receiveMsg);
+                        } else {
+                            Danmu.runState = false;
+                            break;
+                        }
                     }
                 }
             } catch (Exception e) {
                 Danmu.runState = false;
                 logger.info("Receive IO or NullPoint error!");
-                e.printStackTrace();
+                logger.info(e.getMessage());
             }
         }
     }
